@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
-import 'package:notes/domain/auth/value_objects.dart';
+import 'value_objects.dart';
 
 import 'auth_failure.dart';
 
