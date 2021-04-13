@@ -7,3 +7,4 @@ analyzer:
     must_be_immutable: error
     sort_unnamed_constructors_first: ignore
     sort_pub_dependencies: ignore
+    prefer_const_literals_to_create_immutables: ignore
