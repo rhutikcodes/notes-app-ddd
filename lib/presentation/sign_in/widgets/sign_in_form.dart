@@ -30,6 +30,7 @@ class SignInForm extends StatelessWidget {
       },
       builder: (context, state) {
         return Form(
+          // ignore: deprecated_member_use
           autovalidate: state.showErrorMessages,
           child: ListView(
             children: [
@@ -85,6 +86,7 @@ class SignInForm extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
+                    // ignore: deprecated_member_use
                     child: FlatButton(
                       onPressed: () {
                         context.read<SignInFormBloc>().add(
@@ -96,6 +98,7 @@ class SignInForm extends StatelessWidget {
                     ),
                   ),
                   Expanded(
+                    // ignore: deprecated_member_use
                     child: FlatButton(
                       onPressed: () {
                         context.read<SignInFormBloc>().add(
@@ -108,6 +111,7 @@ class SignInForm extends StatelessWidget {
                   ),
                 ],
               ),
+              // ignore: deprecated_member_use
               RaisedButton(
                 onPressed: () {
                   context
