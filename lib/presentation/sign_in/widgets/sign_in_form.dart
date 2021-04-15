@@ -1,9 +1,11 @@
 import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notes/application/auth/bloc/sign_in_form_bloc.dart';
+import 'package:notes/application/auth/sign_in_form/sign_in_form_bloc.dart';
 
 class SignInForm extends StatelessWidget {
+  const SignInForm({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SignInFormBloc, SignInFormState>(
@@ -11,18 +13,15 @@ class SignInForm extends StatelessWidget {
         state.authFailureOrSuccessOption.fold(
           () {},
           (either) => either.fold(
-            (failure) {
-              FlushbarHelper.createError(
-                message: failure.map(
-                  cancelledByUser: (_) => 'Cancelled',
-                  serverError: (_) => 'Server error',
-                  emailAlreadyInUse: (_) => 'Email already in use',
-                  invalidEmailAndPasswordCombination: (_) =>
-                      'Invalid email and password combination',
-                ),
-              ).show(context);
-            },
-            (_) {
+            (failure) => FlushbarHelper.createError(
+              message: failure.map(
+                cancelledByUser: (_) => "Cancelled",
+                serverError: (_) => "Server Error",
+                emailAlreadyInUse: (_) => "Email Already in Use",
+                invalidEmailAndPasswordCombination: (_) => "Invalid credentials",
+              ),
+            ).show(context),
+            (r) => {
               // TODO: Navigate
             },
           ),
@@ -30,12 +29,12 @@ class SignInForm extends StatelessWidget {
       },
       builder: (context, state) {
         return Form(
-          // ignore: deprecated_member_use
-          autovalidate: state.showErrorMessages,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: ListView(
+            padding: const EdgeInsets.all(8),
             children: [
               const Text(
-                '📝',
+                "📝",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 130),
               ),
@@ -43,32 +42,30 @@ class SignInForm extends StatelessWidget {
               TextFormField(
                 decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.email),
-                  labelText: 'Email',
+                  labelText: "Email",
                 ),
-                autocorrect: false,
                 onChanged: (value) => context
                     .read<SignInFormBloc>()
                     .add(SignInFormEvent.emailChanged(value)),
                 validator: (_) => context
-                    .read<SignInFormBloc>()
+                    .watch<SignInFormBloc>()
                     .state
                     .emailAddress
                     .value
                     .fold(
-                      (f) => f.maybeMap(
-                        invalidEmail: (_) => 'Invalid Email',
-                        orElse: () => null,
-                      ),
-                      (_) => null,
-                    ),
+                        (l) => l.maybeMap(
+                              invalidEmail: (_) => "Invalid Email",
+                              orElse: () => null,
+                            ),
+                        (_) => null),
+                autocorrect: false,
               ),
               const SizedBox(height: 8),
               TextFormField(
                 decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.lock),
-                  labelText: 'Password',
+                  labelText: "Password",
                 ),
-                autocorrect: false,
                 obscureText: true,
                 onChanged: (value) => context
                     .read<SignInFormBloc>()
@@ -82,51 +79,46 @@ class SignInForm extends StatelessWidget {
                           (_) => null,
                         ),
               ),
-              const SizedBox(height: 8),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    // ignore: deprecated_member_use
-                    child: FlatButton(
+                    child: TextButton(
                       onPressed: () {
-                        context.read<SignInFormBloc>().add(
-                              const SignInFormEvent
-                                  .signInWithEmailAndPasswordPressed(),
-                            );
+                        context.read<SignInFormBloc>().add(const SignInFormEvent
+                            .signInWithEmailAndPasswordPressed());
                       },
-                      child: const Text('SIGN IN'),
+                      child: const Text("SIGN IN"),
                     ),
                   ),
                   Expanded(
-                    // ignore: deprecated_member_use
-                    child: FlatButton(
-                      onPressed: () {
-                        context.read<SignInFormBloc>().add(
-                              const SignInFormEvent
-                                  .registerWithEmailAndPasswordPressed(),
-                            );
-                      },
-                      child: const Text('REGISTER'),
-                    ),
-                  ),
+                      child: TextButton(
+                    onPressed: () {
+                      context.read<SignInFormBloc>().add(const SignInFormEvent
+                          .registerWithEmailAndPasswordPressed());
+                    },
+                    child: const Text("Register"),
+                  )),
                 ],
               ),
-              // ignore: deprecated_member_use
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () {
                   context
                       .read<SignInFormBloc>()
                       .add(const SignInFormEvent.signInWithGooglePressed());
                 },
-                color: Colors.lightBlue,
                 child: const Text(
-                  'SIGN IN WITH GOOGLE',
+                  "Signin with Google",
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              )
+              ),
+              if (state.isSubmitting) ...[
+                const SizedBox(height: 8),
+                const CircularProgressIndicator()
+              ]
             ],
           ),
         );
