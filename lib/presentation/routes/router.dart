@@ -8,7 +8,7 @@ import 'package:notes/presentation/splash/splash_page.dart';
   generateNavigationHelperExtension: true,
   routes: <AutoRoute>[
     MaterialRoute(page: SplashPage, initial: true),
-    MaterialRoute(page: SignInPage),
+    MaterialRoute(page: SignInPage,path: "SignIn"),
     MaterialRoute(page: NotesPage),
   ],
 )

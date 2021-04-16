@@ -31,7 +31,7 @@ class FirebaseAuthFacade implements IAuthFacade {
         password: passwordStr,
       );
       return right(unit);
-    } on PlatformException catch (e) {
+    } on FirebaseAuthException  catch (e) {
       if (e.code == "email-already-in-use") {
         return left(const AuthFailure.emailAlreadyInUse());
       } else {
@@ -53,8 +53,8 @@ class FirebaseAuthFacade implements IAuthFacade {
         password: passwordStr,
       );
       return right(unit);
-    } on PlatformException catch (e) {
-      if (e.code == "user-not-found" || e.code == "wrong-password") {
+    } on FirebaseAuthException  catch (e) {
+      if (e.code == "wrong-password" || e.code == "user-not-found") {
         return left(const AuthFailure.invalidEmailAndPasswordCombination());
       } else {
         return left(const AuthFailure.serverError());
@@ -84,7 +84,7 @@ class FirebaseAuthFacade implements IAuthFacade {
       return _firebaseAuth
           .signInWithCredential(credential)
           .then((r) => right(unit));
-    } on PlatformException catch (_) {
+    } on FirebaseAuthException  catch (_) {
       return left(const AuthFailure.serverError());
     }
   }

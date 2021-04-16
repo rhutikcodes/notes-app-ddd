@@ -29,7 +29,7 @@ class AppRouter extends _i1.RootStackRouter {
   @override
   List<_i1.RouteConfig> get routes => [
         _i1.RouteConfig(SplashRoute.name, path: '/'),
-        _i1.RouteConfig(SignInRoute.name, path: '/sign-in-page'),
+        _i1.RouteConfig(SignInRoute.name, path: 'SignIn'),
         _i1.RouteConfig(NotesRoute.name, path: '/notes-page')
       ];
 }
@@ -41,7 +41,7 @@ class SplashRoute extends _i1.PageRouteInfo {
 }
 
 class SignInRoute extends _i1.PageRouteInfo {
-  const SignInRoute() : super(name, path: '/sign-in-page');
+  const SignInRoute() : super(name, path: 'SignIn');
 
   static const String name = 'SignInRoute';
 }

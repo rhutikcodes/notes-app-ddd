@@ -1,7 +1,10 @@
 import 'package:another_flushbar/flushbar_helper.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notes/application/auth/auth_bloc.dart';
 import 'package:notes/application/auth/sign_in_form/sign_in_form_bloc.dart';
+import 'package:notes/presentation/routes/router.gr.dart';
 
 class SignInForm extends StatelessWidget {
   const SignInForm({Key? key}) : super(key: key);
@@ -18,11 +21,13 @@ class SignInForm extends StatelessWidget {
                 cancelledByUser: (_) => "Cancelled",
                 serverError: (_) => "Server Error",
                 emailAlreadyInUse: (_) => "Email Already in Use",
-                invalidEmailAndPasswordCombination: (_) => "Invalid credentials",
+                invalidEmailAndPasswordCombination: (_) =>
+                    "Invalid credentials",
               ),
             ).show(context),
-            (r) => {
-              // TODO: Navigate
+            (_) => {
+              AutoRouter.of(context).replace(const NotesRoute()),
+              context.read<AuthBloc>().add(const AuthEvent.authCheckRequested())
             },
           ),
         );
@@ -117,7 +122,7 @@ class SignInForm extends StatelessWidget {
               ),
               if (state.isSubmitting) ...[
                 const SizedBox(height: 8),
-                const CircularProgressIndicator()
+                const LinearProgressIndicator()
               ]
             ],
           ),
