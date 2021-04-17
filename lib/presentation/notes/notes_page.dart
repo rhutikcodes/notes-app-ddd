@@ -22,6 +22,7 @@ class NotesPage extends StatelessWidget {
           body: Column(
             children: [
               const Text("Hello"),
+              // ignore: deprecated_member_use
               RaisedButton(
                 onPressed: () {
                   context.read<AuthBloc>().add(const AuthEvent.signedOut());

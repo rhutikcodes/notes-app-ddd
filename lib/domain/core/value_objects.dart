@@ -5,7 +5,7 @@ import 'error.dart';
 import 'failures.dart';
 
 @immutable
-abstract class ValueObject<T> {
+abstract class  ValueObject<T> {
   const ValueObject();
   Either<ValueFailure<T>, T> get value;
 
